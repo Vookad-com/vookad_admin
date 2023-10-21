@@ -1,0 +1,87 @@
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.MuiDataGrid-main > div:nth-child(3){
+  background-color: pink !important;
+  display: none !important;
+}
+
+@font-face {
+  font-family: 'Inter Sans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/inter-webfont.woff2') format('woff2'),
+         url('/inter-webfont.woff') format('woff');;
+  }
+
+body {
+  font-family: 'Inter Sans'!important;
+}  
+
+.files-dropzone{
+  border-radius: 10px;
+  border: 2px solid black;
+  text-align: center;
+  padding: 2%;
+
+}
+
+.mapboxgl-map{
+  height: 30rem;
+  width: 30rem;
+}
+
+.markericon img{
+  height: 50px;
+  width: 50px;
+}
+
+/* .marker {
+  background-image: url('/gauntlet.png');
+  background-size: cover;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+} */
+
+.liveLocation{
+    background-size: cover;
+    background-color: blueviolet;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}  
+.liveLocation::after{
+    content: "I'm here";
+    width: 8rem;
+    height: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    position: absolute;
+    transform: translate(-40%,40%);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+}

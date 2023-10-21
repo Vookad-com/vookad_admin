@@ -1,0 +1,48 @@
+{
+  "name": "veganzo-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.8.6",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fontsource/roboto": "^4.5.8",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.8",
+    "@mui/x-data-grid": "^5.17.23",
+    "@mui/x-data-grid-generator": "^5.17.23",
+    "@mui/x-data-grid-pro": "^5.17.23",
+    "@next/font": "13.1.6",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@types/react": "^18.2.11",
+    "antd": "^5.2.1",
+    "debug": "^4.3.4",
+    "firebase": "^9.17.1",
+    "fuse.js": "^6.6.2",
+    "graphql": "^16.8.1",
+    "mapbox-gl": "^2.15.0",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-drag-reorder": "^1.2.0",
+    "react-files": "^3.0.0",
+    "react-redux": "^8.0.5",
+    "reactflow": "^11.5.6",
+    "recharts": "^2.3.2",
+    "typesense": "^1.5.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.0",
+    "encoding": "^0.1.13"
+  }
+}

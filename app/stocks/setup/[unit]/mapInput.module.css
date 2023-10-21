@@ -1,0 +1,28 @@
+.mapSearch{
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 999;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.relocate{
+    position: absolute;
+    top: 80%;
+    left: calc(100% - 2rem);
+    width: 29px;
+    height: 29px;
+    z-index: 999;
+    cursor: pointer;
+    background: url('/liveloco.png') #fff;
+    background-position: 29px 0;
+    border: none;
+    background-size: 1000%;
+    border-radius: 100%;
+}
+
+.mapSearch input{
+    padding: 5px .5rem;
+}
