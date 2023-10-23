@@ -19,6 +19,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Switch } from '@mui/material';
 import Button from '@mui/material/Button';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Snackbar from '@mui/material/Snackbar';
@@ -32,7 +33,7 @@ import Appbar from './appbar';
 import { useQuery } from '@apollo/client';
 import { inventoryItems } from 'graphql/queries';
 import graphql from 'graphql/config';
-import { delItem } from 'graphql/mutation';
+import { delItem, liveToggle } from 'graphql/mutation';
 
 const Row = ({ type, row, notify, setrefresh, refreshthis, refetch })=>{
 
@@ -42,6 +43,8 @@ const Row = ({ type, row, notify, setrefresh, refreshthis, refetch })=>{
     const handleOpenUserMenu = (event) => {
       setAnchorElUser(event.currentTarget);
     };
+
+    const [live, setLive] =React.useState(row.enable);
 
     const handleCloseNavMenu = () => {
       setAnchorElNav(null);
@@ -62,6 +65,22 @@ const Row = ({ type, row, notify, setrefresh, refreshthis, refetch })=>{
     const handleClose = () => {
       setOpen(false);
     };
+
+    const handleStatus = async () => {
+      try {
+        let status = !live;
+        const {data: { liveToggle : { enable } }} = await graphql.mutate({
+          mutation: liveToggle,
+          variables: {
+            liveToggleId: row._id,
+            status
+          }
+        });
+        setLive(enable);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     const handleDel = async (e) => {
       let id = e.target.id;
@@ -94,6 +113,7 @@ const Row = ({ type, row, notify, setrefresh, refreshthis, refetch })=>{
       <TableCell component="th" scope="row">
         {row.name}
       </TableCell>
+      <TableCell align="right"><Switch checked={live}  onChange={handleStatus}  inputProps={{ 'aria-label': 'controlled' }} color="warning" /></TableCell>
       <TableCell align="right"><Link href={`/inventory/${type}/${row._id}`}><EditIcon /></Link></TableCell>
       <TableCell align="right"><DeleteIcon onClick={handleClickOpen}/></TableCell>
       <Dialog
@@ -177,6 +197,7 @@ const Product = ({ params }) => {
                       <TableHead >
                         <TableRow className='tableName'>
                           <TableCell><b style={{'fontSize':18,}} >Product</b></TableCell>
+                          <TableCell align="right"><b style={{'fontSize':18,}} >Live</b></TableCell>
                           <TableCell align="right"><b style={{'fontSize':18,}} >Edit</b></TableCell>
                           <TableCell align="right"><b style={{'fontSize':18,}} >Delete</b></TableCell>
                         </TableRow>

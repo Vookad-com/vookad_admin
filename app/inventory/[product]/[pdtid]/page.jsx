@@ -73,7 +73,6 @@ const Add = ({ params }) => {
               _id:docID,
               name,
               description: descrip,
-              enable: true,
               family: [type],
               gallery: [...arr.map(e => {
                     return {
@@ -133,7 +132,7 @@ const Add = ({ params }) => {
     }
 
     const handleDel = (e) => {
-      let arr = fileData;
+      let arr = [...fileData];
       let i = parseInt(e.currentTarget.id);
       // console.log(fileData.length)
       try {

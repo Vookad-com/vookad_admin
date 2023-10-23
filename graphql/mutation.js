@@ -21,3 +21,22 @@ mutation NewItemAdd($deleteinventoryItemId: ID) {
       }
   }
 `;
+export const liveToggle= gql`
+mutation Mutation($liveToggleId: ID!, $status: Boolean) {
+  liveToggle(id: $liveToggleId, status: $status) {
+    enable
+  }
+}
+`;
+export const editbanner= gql`
+mutation Mutation($carouselId: ID!, $payload: [GalleryInput]) {
+  carousel(id: $carouselId, payload: $payload) {
+    gallery {
+      route
+      url
+      name
+      id
+    }
+  }
+}
+`;

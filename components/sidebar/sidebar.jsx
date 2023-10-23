@@ -27,6 +27,8 @@ import Divider from '@mui/material/Divider';
 import MediationIcon from '@mui/icons-material/Mediation';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import Link from 'next/link';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 
 const drawerWidth = 240;
@@ -63,9 +65,13 @@ export default function Sidebar(props){
 
     const [open, setOpen] = React.useState(true);
     const [openStock, setStockOpen] = React.useState(true);
+    const [openApp, setAppOpen] = React.useState(true);
 
     const handleClick = () => {
         setOpen(!open);
+      };
+    const handleClick3 = () => {
+        setAppOpen(!openApp);
       };
     const handleClick2 = () => {
         setStockOpen(!openStock);
@@ -95,12 +101,31 @@ export default function Sidebar(props){
             </ListItemIcon>
             <ListItemText primary="Customers" />
           </ListItemButton>
-          <ListItemButton onClick={handleClick}>
+          <ListItemButton onClick={handleClick3}>
             <ListItemIcon>
-                <InventoryIcon />
+              <PhoneAndroidIcon />
             </ListItemIcon>
-              <ListItemText primary="Inventory" />
-              {open ? <ExpandLess /> : <ExpandMore />}
+            <ListItemText primary="App Stuff" />
+              {openApp ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={openApp} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+              <Link href="/app/banner/">
+                <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                        <ViewCarouselIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Banner" />
+                </ListItemButton>
+              </Link>
+              </List>
+            </Collapse>
+          <ListItemButton onClick={handleClick2}>
+            <ListItemIcon>
+                <StorageIcon />
+              </ListItemIcon>
+              <ListItemText primary="Stock" />
+              {openStock ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>

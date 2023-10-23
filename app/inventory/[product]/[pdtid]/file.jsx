@@ -17,8 +17,8 @@ const MultiFile = (props) => {
   const ArrangeBox = React.useCallback(() =>{
 
     const getChangedPos = async (currentPos, newPos) => {
-      let arr = fileData;
-      [arr[currentPos], arr[newPos]]= await [arr[newPos], arr[currentPos]];
+      let arr = [...fileData];
+      [arr[currentPos], arr[newPos]]= [arr[newPos], arr[currentPos]];
       setFiles(arr);
     };
 
