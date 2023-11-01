@@ -18,6 +18,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import SaveIcon from '@mui/icons-material/Save';
 import CircularProgress from '@mui/material/CircularProgress';
 import { green } from '@mui/material/colors';
+import Checkbox from '@mui/material/Checkbox';
+
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 import Appbar from '../appbar';
 
@@ -37,6 +40,25 @@ const Add = ({ params }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
+
+    const checkboxes = ['breakfast', 'lunch', 'dinner', 'snacks'];
+    const checkboxRefs = checkboxes.reduce((acc, checkboxName) => {
+      acc[checkboxName] = React.useRef(false);
+      return acc;
+    }, {});
+
+    const [selectedOptions, setSelectedOptions] = React.useState([]);
+
+    const handleCheckboxChange = (checkboxName) => {
+      const checkboxRef = checkboxRefs[checkboxName];
+      checkboxRef.current = !checkboxRef.current;
+
+      if (checkboxRef.current) {
+        setSelectedOptions([...selectedOptions, checkboxName]);
+      } else {
+        setSelectedOptions(selectedOptions.filter((option) => option !== checkboxName));
+      }
+    };
 
     const [name, setName] = React.useState('')
     const [descrip, setDesc] = React.useState(``)
@@ -74,6 +96,7 @@ const Add = ({ params }) => {
               name,
               description: descrip,
               family: [type],
+              tags:selectedOptions,
               gallery: [...arr.map(e => {
                     return {
                     id: e.id,
@@ -154,6 +177,11 @@ const Add = ({ params }) => {
         setDesc(doc.description);
         setRows(doc.category);
         setFiles(doc.gallery);
+        setSelectedOptions(doc.tags);
+        checkboxes.forEach((checkboxName) => {
+          const isChecked = doc.tags.includes(checkboxName);
+          checkboxRefs[checkboxName].current = isChecked;
+        });
       }
     },[loadingApi]);
 
@@ -186,6 +214,20 @@ const Add = ({ params }) => {
                       value={descrip}
                       onChange={(e)=>{setDesc(e.target.value)}}></TextField>
                   </FormControl>
+                  <div>
+                    <ul style={{display:"flex", justifyContent:"space-evenly", listStyle:'none'}}>
+                    {checkboxes.map((checkboxName) => (
+                      <li key={checkboxName}>
+                        <Checkbox
+                          id={checkboxName}
+                          onChange={() => handleCheckboxChange(checkboxName)}
+                          checked={selectedOptions.includes(checkboxName)}
+                        />
+                        <label htmlFor={checkboxName}>{checkboxName}</label>
+                      </li>
+                    ))}
+                    </ul>
+                  </div>
                   <div sx={{ p: 2 }}>
                     <Typography variant="h5" gutterBottom>
                       Category

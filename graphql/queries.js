@@ -27,6 +27,7 @@ query GetInventoryItem($getInventoryItemId: ID) {
     getInventoryItem(id: $getInventoryItemId) {
         name
         description
+        tags
         category {
           name
           price
