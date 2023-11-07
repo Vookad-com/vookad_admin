@@ -40,3 +40,19 @@ mutation Mutation($carouselId: ID!, $payload: [GalleryInput]) {
   }
 }
 `;
+
+export const newChef= gql`
+mutation Mutation($chef: ChefInput) {
+  newchef(chef: $chef) {
+    _id
+  }
+}
+`;
+
+export const editmenu = gql`
+mutation EditMenu($chefId: String, $inventoryid: String, $enable: Boolean) {
+  editMenu(chefId: $chefId, inventoryid: $inventoryid, enable: $enable) {
+    enable  
+  }
+}
+`;

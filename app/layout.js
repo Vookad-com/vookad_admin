@@ -10,12 +10,6 @@ import client from 'graphql/config';
 
 export default function RootLayout({ children }) {
 
-  useEffect(()=>{
-    if(store.getState().orders.orders.length == 0){
-      callordersDB();
-    }
-  }, []);
-
   return (
     <html lang="en">
       {/*

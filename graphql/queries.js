@@ -41,3 +41,30 @@ query GetInventoryItem($getInventoryItemId: ID) {
     }
   }
 `;
+
+export const getMenu = gql`
+query GetMenu($getchefId: ID!) {
+  getchef(id: $getchefId) {
+    displayname
+  }
+  getMenu(id: $getchefId) {
+    inventoryid
+    enable
+  }
+  inventoryItems(family: "menu") {
+      _id
+      name
+    }
+}
+`;
+
+export const getChefs = gql`
+query Getchefs {
+  getchefs {
+    _id
+    name
+    pincode
+    phone
+  }
+}
+`

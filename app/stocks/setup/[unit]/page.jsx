@@ -37,6 +37,10 @@ import Appbar from '../appbar';
 import { database } from '../../../../firebase/config';
 import { collection, addDoc, getDocs, setDoc, doc, query, where } from "firebase/firestore"; 
 import MapInput from './mapInput';
+import client from 'graphql/config';
+import { getChefs } from 'graphql/queries';
+import { useState } from 'react';
+import { newChef } from 'graphql/mutation';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,25 +63,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-
 function Stores({params}) {
   const [open, setOpen] = React.useState(false);
 
   // store creating stuff
   const [pickup, setPickup] = React.useState();
-  const [unit, setUnit] = React.useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [pincode, setPincode] = useState('');
+  const [landmark, setLandmark] = useState('');
+  const [area, setArea] = useState('');
+  const [building, setBuilding] = useState('');
 
   // displaying stuff
   const [stores, setStores] = React.useState([]);
@@ -96,51 +93,59 @@ function Stores({params}) {
   };
 
   const createObj = async ()=>{
-    const docRef = await addDoc(collection(database, `store`),{name:unit, type:params.unit, lng: pickup[0], lat: pickup[1],});
-    addDoc(collection(database,`store/${docRef.id}/logs`), {'type':'genesis'});
-    const inventory = await getDocs(collection(database, `inventory`));
-    inventory.forEach(async type =>{
-      let items = await getDocs(collection(database, `inventory`, type.id, `stack`));
-      items.forEach(async pdt => {
-        await setDoc(doc(collection(database,`store/${docRef.id}/${type.id}`),`${pdt.id}`), {quantity: 0, static: doc(database, `inventory/${type.id}/stack/${pdt.id}`)});
-      })
-    })
-    setOpen(false);
-    // await typesense.collections('inventory').documents().create({
-    //   id: docRef.id,
-    //   name: 'not edited',
-    //   descrip: 'not edited',
-    //   type: props.type,
-    //   cover: 'not edited',
-    // });
-    router.push(`/stocks/unit/${docRef.id}/`);
+
+    const formData = {
+      name: name,
+      phone: phone,
+      address: {
+        landmark: landmark,
+        area: area,
+        building: building,
+      },
+      displayname: displayName,
+      location: pickup,
+      pincode: pincode,
+    };
+    try {
+      const {data:{newchef}} = await client.mutate({
+        mutation: newChef,
+        variables:{chef:formData,}
+      });
+      setOpen(false);
+      fetchStores();
+      router.push(`/stocks/unit/${newchef._id}/`);
+    } catch (error) {
+      console.error(error);
+      alert("try again");
+    }
   }
 
   function searchit(e){
     setQuery(e.target.value)
     if(e.target.value!=''){
       const fuse = new Fuse(stores, {
-          keys: ['name']
+          keys: ['name', 'pincode', 'phone']
       })
       setDispStores(fuse.search(e.target.value).map(i => i.item));
     } else{
       setDispStores(stores);
     }
   }
-
+  async function fetchStores(){
+    const {data:{getchefs:allchefs}} = await client.mutate({
+      mutation: getChefs
+    })
+    let data = allchefs.map((ele)=> {
+      return {
+        ...ele,
+        path: `/stocks/unit/${ele._id}/`,
+      }
+    })
+    setStores(data)
+    setDispStores(data)
+  }
   React.useEffect(()=>{
-    async function fetchStores(){
-      const q = query(collection(database, 'store'), where('type','==',params.unit));
-      const storesDB = await getDocs(q);
-      let data = storesDB.docs.map((ele)=> {
-        return {
-          name:ele.data().name,
-          path: `/stocks/unit/${ele.id}/`,
-        }
-      })
-      setStores(data)
-      setDispStores(data)
-    }
+    
     fetchStores();
   },[])
 
@@ -161,7 +166,9 @@ function Stores({params}) {
             <Table sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                 <TableRow>
-                    <StyledTableCell align="left">Location</StyledTableCell>
+                    <StyledTableCell align="left">Chef</StyledTableCell>
+                    <StyledTableCell align="left">Phone</StyledTableCell>
+                    <StyledTableCell align="left">Pincode</StyledTableCell>
                     <StyledTableCell align="center">Info</StyledTableCell>
                 </TableRow>
                 </TableHead>
@@ -170,6 +177,12 @@ function Stores({params}) {
                     <StyledTableRow key={row.name}>
                     <StyledTableCell align="left" component="th" scope="row">
                         {row.name}
+                    </StyledTableCell>
+                    <StyledTableCell align="left" component="th" scope="row">
+                        {row.phone}
+                    </StyledTableCell>
+                    <StyledTableCell align="left" component="th" scope="row">
+                        {row.pincode}
                     </StyledTableCell>
                     <StyledTableCell align="center"><Link href={row.path}><LaunchIcon /></Link></StyledTableCell>
                     </StyledTableRow>
@@ -193,14 +206,62 @@ function Stores({params}) {
                   '& .MuiTextField-root': { m: 2 },
                 }}>
                 <TextField
-                  required
-                  id="outlined-required"
-                  label="Warehouse-Location"
-                  placeholder='Baripada Storage'
-                  value={unit}
-                  onChange={(e)=>{setUnit(e.target.value)}}
-                />
-                <br />
+                required
+                id="outlined-required"
+                label="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Phone"
+                type='number'
+                placeholder='90781014920'
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Display Name"
+                placeholder='Chef Sushma'
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Pincode"
+                type='number'
+                placeholder='753014'
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+              />
+              <br />
+              <h3>Address</h3>
+              <TextField
+                required
+                id="outlined-required"
+                label="Landmark"
+                value={landmark}
+                onChange={(e) => setLandmark(e.target.value)}
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Area"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Building"
+                value={building}
+                onChange={(e) => setBuilding(e.target.value)}
+              />
+              <br />
                 <MapInput settingMap={setPickup} />
               </Box>
             </DialogContentText>

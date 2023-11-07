@@ -159,7 +159,7 @@ export default function Sidebar(props){
             <ListItemIcon>
                 <StorageIcon />
               </ListItemIcon>
-              <ListItemText primary="Stock" />
+              <ListItemText primary="Chefs" />
               {openStock ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={openStock} timeout="auto" unmountOnExit>
@@ -177,7 +177,7 @@ export default function Sidebar(props){
                   <ListItemIcon>
                     <ApartmentIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Storage Unit" />
+                  <ListItemText primary="Chef" />
                 </ListItemButton>
               </Link>  
               </List>

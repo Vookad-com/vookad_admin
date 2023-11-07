@@ -22,8 +22,8 @@ import { collection, addDoc } from "firebase/firestore";
 
 const pages = ['Products', 'Add'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-const setup = ['source','warehouse', 'retail']
-const unit = ['vegetables','fruits', 'beverages']
+const setup = ['chefs']
+const unit = ['menu']
 
 export default function Appbar(props){
 
@@ -88,7 +88,15 @@ export default function Appbar(props){
                         </Button>
                       </Link>)
                     })
-                  ):(setup.map(ele => {
+                  ):([<Link key={'Network'} href={`/stocks/setup`}>
+                        <Button
+                          onClick={handleCloseNavMenu}
+                          sx={{ my: 2, color: 'white', display: 'block' }}
+                        >
+                          {'Network'}
+                        </Button>
+                      </Link>
+                    ,...setup.map(ele => {
                     return (<Link key={ele} href={`/stocks/setup/${ele}`}>
                       <Button
                         onClick={handleCloseNavMenu}
@@ -97,7 +105,7 @@ export default function Appbar(props){
                         {ele}
                       </Button>
                     </Link>)
-                  }))}
+                  })])}
               </Box>
 
             </Toolbar>
