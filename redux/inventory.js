@@ -5,15 +5,13 @@ import { database } from '../firebase/config';
 export const inventorySlice = createSlice({
   name: 'inventory',
   initialState: {
-    vegetables: false,
-    fruits: false,
-    beverages: false,
+    items: {},
   },
   reducers: {
     load: (state, action) => {
       if(action.payload){
-        state[action.payload.type] = [...action.payload.arr];
-        console.log("done")
+        state.items = {...action.payload};
+        console.log("inventory updated")
       }
     },
   },

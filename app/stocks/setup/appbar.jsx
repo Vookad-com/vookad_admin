@@ -23,7 +23,20 @@ import { collection, addDoc } from "firebase/firestore";
 const pages = ['Products', 'Add'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const setup = ['chefs']
-const unit = ['menu']
+const unit = [
+  {
+    name:'menu',
+    route: (id)=>`/stocks/unit/${id}`
+  },
+  {
+    name: 'orders',
+    route: (id)=>`/orders/chef/${id}/pending`
+  },
+  {
+    name: 'completed',
+    route: (id)=>`/orders/chef/${id}/prepared`
+  }
+]
 
 export default function Appbar(props){
 
@@ -79,12 +92,12 @@ export default function Appbar(props){
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                   {props.type=='store'?(
                     unit.map(ele => {
-                      return (<Link key={ele} href={`/stocks/unit/${props.id}/${ele}`}>
+                      return (<Link key={ele.name} href={ele.route(props.id)}>
                         <Button
                           onClick={handleCloseNavMenu}
                           sx={{ my: 2, color: 'white', display: 'block' }}
                         >
-                          {ele}
+                          {ele.name}
                         </Button>
                       </Link>)
                     })

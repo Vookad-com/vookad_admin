@@ -7,6 +7,7 @@ import { callordersDB } from 'components/helpers/getOrders'
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 import client from 'graphql/config';
 
+callordersDB(new Date().toISOString());
 
 export default function RootLayout({ children }) {
 

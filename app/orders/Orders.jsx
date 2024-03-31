@@ -61,6 +61,7 @@ export default function Orders(props) {
     orders = orders.slice(0, limit);
   }
 
+
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
@@ -68,20 +69,20 @@ export default function Orders(props) {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
+            <TableCell>Phone</TableCell>
             <TableCell>Ship To</TableCell>
             <TableCell align="right">Sale Amount</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((row, i) => (
-            <TableRow key={row.ref.id}>
+          {orders.map((row, i) => {
+            return <TableRow key={row.id}>
               <TableCell>{row.time}</TableCell>
               <TableCell>{row.phone}</TableCell>
-              <TableCell><Link target='_blank' href={`https://www.google.co.in/maps/place/${row.address.location[1]}N+${row.address.location[0]}E`} >📍</Link></TableCell>
+              <TableCell><Link target='_blank' href={`https://www.google.co.in/maps/place/${row.address.location.coordinates[1]}N+${row.address.location.coordinates[0]}E`} >📍</Link></TableCell>
               <TableCell align="right">{`₹${row.total}`}</TableCell>
             </TableRow>
-          ))}
+          })}
         </TableBody>
       </Table>
     </React.Fragment>

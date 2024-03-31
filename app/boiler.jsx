@@ -51,15 +51,17 @@ const Boiler = (props) => {
     return(
     
         <ThemeProvider theme={mdTheme}>
-          <Box sx={{ display: 'flex' }}>
+          <main style={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="absolute" open={open}>
-              <Toolbar
+            <Toolbar
+                key='primary'
                 sx={{
                   pr: '24px', // keep right padding when drawer closed
                 }}
               >
                 <IconButton
+                  key="hamburger"
                   edge="start"
                   color="inherit"
                   aria-label="open drawer"
@@ -80,7 +82,7 @@ const Boiler = (props) => {
                 >
                   {props.title}
                 </Typography>
-                <IconButton color="inherit">
+                <IconButton color="inherit" key="bell">
                   <Badge badgeContent={4} color="secondary">
                     <NotificationsIcon />
                   </Badge>
@@ -89,7 +91,6 @@ const Boiler = (props) => {
             </AppBar>
             <Sidebar toggleDrawer={toggleDrawer} drawerVar={open} />
             <Box
-              component="main"
               sx={{
                 backgroundColor: (theme) =>
                   theme.palette.mode === 'light'
@@ -97,14 +98,14 @@ const Boiler = (props) => {
                     : theme.palette.grey[900],
                 flexGrow: 1,
                 height: '100vh',
+                marginTop: '4rem',
                 overflow: 'auto',
               }}
             >
-              <Toolbar />
-            {props.children}
+              {props.children}
               
             </Box>
-          </Box>
+          </main>
         </ThemeProvider>
     )
 }

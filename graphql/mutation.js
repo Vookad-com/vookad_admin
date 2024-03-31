@@ -56,3 +56,9 @@ mutation EditMenu($chefId: String, $inventoryid: String, $enable: Boolean) {
   }
 }
 `;
+
+export const setToPickup = gql`
+mutation setToPickup($orderid: String) {
+  setToPickup(orderid: $orderid)
+}
+`;

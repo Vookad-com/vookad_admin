@@ -68,3 +68,39 @@ query Getchefs {
   }
 }
 `
+
+export const getOrders = gql`
+query GetOrdersbyDate($dateIso: String!) {
+  orders: getOrdersbyDate(dateISO: $dateIso) {
+    _id
+    userInfo {
+      phone
+    }
+    address {
+      location {
+        coordinates
+      }
+      building
+      area
+      landmark
+    }
+    total
+    createdAt
+    status
+  }
+}
+`;
+export const getOrdersbyChef = gql`
+query GetOrdersbyChef($chefId: String!, $status: String!) {
+ orders: getOrdersByChef(chefId: $chefId, status: $status) {
+    _id
+    items {
+      _id
+      pdtid
+      catid
+      chefid
+      quantity
+    }
+  }
+}
+`;
